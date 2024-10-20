@@ -1,14 +1,5 @@
 from Modules import Module_shodan
 import argparse
 
-#APIKEY suggested: skoTKeGUubhAIZbKPZEBpEeEiuk8o5Wu
-parser = argparse.ArgumentParser(description="Search IP", \
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-parser.add_argument("-API_KEY_sho", dest="API_KEY_sho", \
-                    help="API KEY required to use the Shodan API", required=True)
-parser.add_argument("-ports", dest="ports", \
-                    help="El puerto que quieres buscar que este abierto", default="80")
-params=parser.parse_args()
-
-ports_shodan="port: "+params.ports
-APIKEY_shodan=params.API_KEY_sho
+#APIKEY for shodan suggested: skoTKeGUubhAIZbKPZEBpEeEiuk8o5Wu
+#APIKEY for IPAbuseDB suggested: 51bffcedf179e67ae15996a1160b04cacb0e23f49841aa355b2602e8335e2cf692c698c93033e9a6
