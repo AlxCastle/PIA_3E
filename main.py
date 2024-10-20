@@ -1,4 +1,3 @@
-import argparse
 from termcolor import colored
 from honeypot_ssh import start_honeypot
 from Modules.Module_shodan import *
