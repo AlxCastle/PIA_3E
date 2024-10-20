@@ -1,5 +1,7 @@
 import shodan
 import logging
+import requests
+import json
 
 #Function to search for vulnerabilities in different ports for different IPS
 
