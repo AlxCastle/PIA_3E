@@ -195,6 +195,7 @@ def Suspicious_IP(APIKEY):
                         print("La IP sospechosa es del país:", r_json_check["data"]["reports"][0]["reporterCountryName"])
                     else:
                         print("No se encontraron reportes recientes para esta IP.")
+                    print("-" * 50)
 
                     #the results of the suspicious IPs are printed on the screen
 
@@ -210,7 +211,8 @@ def Suspicious_IP(APIKEY):
                                 file.write("La ip sospechosa es del pais:"+\
                                         str(r_json_check["data"]["reports"][0]["reporterCountryName"]))
                             else:
-                                print("No se encontraron reportes recientes para esta IP.")
+                                file.write("No se encontraron reportes recientes para esta IP.")
+                            file.write("-"*50)
                 
                         #The output of the suspicious IP is saved in a file
 
