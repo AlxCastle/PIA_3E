@@ -43,9 +43,12 @@ if __name__ == "__main__":
                 start_honeypot(port)
 
             elif option == 2:
-                pass
+                APIKEY=input("Ingrese la API key que se usara para conectarse a la API de shodan")
+                Port_shodan=input("Ingrese los puertos que quiera ver, en caso de ser mas de uno separarlos por una coma y un espacio")
+                Search_Vulnerabilities(APIKEY,Port_shodan)
             elif option == 3:
-                pass
+                APIKEY=input("Ingrese la API key que se usara para conectarse a la API de IPAbuseDB")
+                Suspicious_IP(APIKEY)
             elif option == 4:
                 pass
             elif option == 5:
