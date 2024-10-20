@@ -1,4 +1,4 @@
-from Modules import Module_shodan
+from Modules.Module_shodan import *
 import argparse
 
 #APIKEY for shodan suggested: skoTKeGUubhAIZbKPZEBpEeEiuk8o5Wu
