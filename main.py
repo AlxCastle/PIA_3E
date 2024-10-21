@@ -1,6 +1,7 @@
 from termcolor import colored
-from honeypot_ssh import start_honeypot
-from Modules.Module_shodan import *
+from Modules.honeypot_ssh import start_honeypot
+from Modules.Modules_API import *
+from Modules.analyze_connections import analyze_connections
 
 #APIKEY for shodan suggested: skoTKeGUubhAIZbKPZEBpEeEiuk8o5Wu
 #APIKEY for IPAbuseDB suggested: 51bffcedf179e67ae15996a1160b04cacb0e23f49841aa355b2602e8335e2cf692c698c93033e9a6
@@ -13,7 +14,7 @@ def menu():
     [1]. SSH Honeypot
     [2]. Consume API Shodan
     [3]. Consume API IPAbuseD
-    [4].
+    [4]. Analizar conexiones
 """
     print(msg)
 
@@ -50,7 +51,18 @@ if __name__ == "__main__":
                 APIKEY=input("Ingrese la API key que se usara para conectarse a la API de IPAbuseDB")
                 Suspicious_IP(APIKEY)
             elif option == 4:
-                pass
+                try:
+                    opcion_nombre=int(input("Desea editar el nombre del archivo en donde se guardará el reporte (suspicious_connections_report.txt)? 1-Si 2-No: "))
+                    while (opcion_nombre <=0 or opcion_nombre>2):
+                        nombre_reporte=input("Opicón no válida, intente nuevamente")
+                    if opcion_nombre == 1:
+                        nombre_reporte=input("Ingrese el nombre con el que se guardará el reporte (incluya la extensión .txt): ")
+                        analyze_connections(nombre_reporte)
+                    else:
+                        analyze_connections()
+                except Exception: 
+                    print("Ha ocurrido un error, intente nuevamente")
+
             elif option == 5:
                 pass
             elif option == 0:
