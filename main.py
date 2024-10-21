@@ -6,8 +6,8 @@ from Modules.analyze_connections import analyze_connections
 #APIKEY for shodan suggested: skoTKeGUubhAIZbKPZEBpEeEiuk8o5Wu
 #APIKEY for IPAbuseDB suggested: 51bffcedf179e67ae15996a1160b04cacb0e23f49841aa355b2602e8335e2cf692c698c93033e9a6
 
-def menu():
-    """Esta funcion contiene el formato del menu."""
+def format_menu():
+    """This function contains the format of the menu."""
     msg = "-"*50+"""
         MENU
     [0]. Salir
@@ -21,12 +21,13 @@ def menu():
 if __name__ == "__main__":
     while True:
         try:
-            menu()
+            format_menu()
             option = int(input("Seleccione una opcion: "))
+            
             if option == 1: 
                 port = input("Port to bind the SSH server (default 2222): ")
                 
-                # Validar el puerto
+                #Validate the port.
                 while True:
                     try: 
                         if port == "":
@@ -39,17 +40,17 @@ if __name__ == "__main__":
                             break 
                     except ValueError: 
                         port = input("Es un dato numérico, si no desea ingresar un puerto presione enter: ")
-
-                # Inicia el honeypot
                 start_honeypot(port)
-
+                
             elif option == 2:
                 APIKEY=input("Ingrese la API key que se usara para conectarse a la API de shodan")
                 Port_shodan=input("Ingrese los puertos que quiera ver, en caso de ser mas de uno separarlos por una coma y un espacio")
                 Search_Vulnerabilities(APIKEY,Port_shodan)
+                
             elif option == 3:
                 APIKEY=input("Ingrese la API key que se usara para conectarse a la API de IPAbuseDB")
                 Suspicious_IP(APIKEY)
+                
             elif option == 4:
                 try:
                     opcion_nombre=int(input("Desea editar el nombre del archivo en donde se guardará el reporte (suspicious_connections_report.txt)? 1-Si 2-No: "))
@@ -65,6 +66,7 @@ if __name__ == "__main__":
 
             elif option == 5:
                 pass
+                
             elif option == 0:
                 print("Saliendo...")
                 break
