@@ -169,7 +169,7 @@ def handle_connection(client, addr):
 def capture_user_input():
     """Waits for user input to stop the honeypot server"""
     global stop_server
-    x = input("Press Enter to stop the honeypot...")
+    x = input("Presione Enter para detener la honeypot...")
     stop_server = True
 
 
@@ -184,7 +184,7 @@ def start_server(port, bind_addr):
     logging.info(f'Server listening on {bind_addr}:{port}')
     print(f"""
           **SSH HONEYPOT**
-Server listening on {bind_addr} : {port} \n""")
+Servidor escuchando en {bind_addr} : {port} \n""")
 
     while not stop_server:
         try:
@@ -195,7 +195,7 @@ Server listening on {bind_addr} : {port} \n""")
         except Exception as e:
             logging.error(f'Error accepting connection: {e}')
 
-    print("Honeypot stopped.")
+    print("Honeypot Detenida.")
 
 
 def start_honeypot(port):
