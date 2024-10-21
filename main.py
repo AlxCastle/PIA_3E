@@ -2,6 +2,7 @@ from termcolor import colored
 from Modules.honeypot_ssh import start_honeypot
 from Modules.Modules_API import *
 from Modules.analyze_connections import analyze_connections
+from Modules.suspicious_services import suspicious_services
 
 #APIKEY for shodan suggested: skoTKeGUubhAIZbKPZEBpEeEiuk8o5Wu
 #APIKEY for IPAbuseDB suggested: 51bffcedf179e67ae15996a1160b04cacb0e23f49841aa355b2602e8335e2cf692c698c93033e9a6
@@ -15,6 +16,7 @@ def format_menu():
     [2]. Consume API Shodan
     [3]. Consume API IPAbuseD
     [4]. Analizar conexiones
+    [5]. Servicios sospechosos
 """
     print(msg)
 
@@ -55,7 +57,7 @@ if __name__ == "__main__":
                 try:
                     opcion_nombre=int(input("Desea editar el nombre del archivo en donde se guardará el reporte (suspicious_connections_report.txt)? 1-Si 2-No: "))
                     while (opcion_nombre <=0 or opcion_nombre>2):
-                        nombre_reporte=input("Opicón no válida, intente nuevamente")
+                        opcion_nombre = int(input("Opicón no válida, intente nuevamente: "))
                     if opcion_nombre == 1:
                         nombre_reporte=input("Ingrese el nombre con el que se guardará el reporte (incluya la extensión .txt): ")
                         analyze_connections(nombre_reporte)
@@ -65,7 +67,13 @@ if __name__ == "__main__":
                     print("Ha ocurrido un error, intente nuevamente")
 
             elif option == 5:
-                pass
+                try:
+                    opcion_generar_excel = int(input("Deseas conservar el excel con los procesos activos? 1-Sí 2-No: "))
+                    while opcion_generar_excel<1 or opcion_generar_excel>2:
+                        opcion_generar_excel = int(input("Opción no válida, vuleve a ingresarla: "))
+                    suspicious_services(opcion_generar_excel)
+                except Exception:
+                    print("Ha ocurrido un error, intentalo de nuevo")
                 
             elif option == 0:
                 print("Saliendo...")
