@@ -46,8 +46,9 @@ if __name__ == "__main__":
                 
             elif option == 2:
                 APIKEY=input("Ingrese la API key que se usara para conectarse a la API de shodan")
-                Port_shodan=input("Ingrese los puertos que quiera ver, en caso de ser mas de uno separarlos por una coma y un espacio")
-                Search_Vulnerabilities(APIKEY,Port_shodan)
+                ports=input("Ingrese los puertos que quiera ver, en caso de ser mas de uno separarlos por una coma y un espacio")
+                port_shodan="port: "+str(port)
+                Search_Vulnerabilities(APIKEY,port_shodan)
                 
             elif option == 3:
                 APIKEY=input("Ingrese la API key que se usara para conectarse a la API de IPAbuseDB")
