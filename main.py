@@ -12,9 +12,9 @@ def format_menu():
     msg = "-"*50+"""
         MENU
     [0]. Salir
-    [1]. SSH Honeypot
-    [2]. Consume API Shodan
-    [3]. Consume API IPAbuseD
+    [1]. Iniciar SSH Honeypot
+    [2]. Consultar API Shodan
+    [3]. Consultar API IPAbuseD
     [4]. Analizar conexiones
     [5]. Servicios sospechosos
 """
@@ -27,7 +27,7 @@ if __name__ == "__main__":
             option = int(input("Seleccione una opcion: "))
             
             if option == 1: 
-                port = input("Port to bind the SSH server (default 2222): ")
+                port = input("Puerto para vincular el servidor SSH (default 2222): ")
                 
                 #Validate the port.
                 while True:
