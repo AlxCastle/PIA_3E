@@ -6,6 +6,17 @@ import paramiko
 from termcolor import colored
 from datetime import datetime
 
+
+#Configure basic logging settings
+log = logging.getLogger('ssh_honeypot')
+log.setLevel(logging.INFO)
+
+file_handler = logging.FileHandler('report_ssh_honeypot.log')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+log.addHandler(file_handler)
+
+
 #Global variable to control stopping the SSH honeypot
 stop_server = False  
 
@@ -26,19 +37,11 @@ def get_local_ip():
         sock.connect(('8.8.8.8', 80))
         local_ip = sock.getsockname()[0]
     except Exception as e:
-        logging.error(f"Error obtaining local IP: {e}")
+        log.error(f"Error obtaining local IP: {e}")
         local_ip = '127.0.0.1' 
     finally:
         sock.close()
     return local_ip
-
-
-#Configure basic logging settings
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
-    filename='report_ssh_honeypot.log'
-)
 
 
 class SshHoneypot(paramiko.ServerInterface):
@@ -53,19 +56,19 @@ class SshHoneypot(paramiko.ServerInterface):
         """Allows 'session' or 'shell' channel requests.
         Logs the request type and client IP."""
         if kind in ['session', 'shell']:
-            logging.info(f'Channel request: {self.client_ip} ({kind})')
+            log.info(f'Channel request: {self.client_ip} ({kind})')
             return paramiko.OPEN_SUCCEEDED
         return paramiko.OPEN_FAILED_ADMINISTRATIVELY_PROHIBITED
 
     def get_allowed_auths(self, username):
         """Returns the allowed authentication method as 'password'.
         Logs the username and client IP for authentication attempts."""
-        logging.info(f'Auth requested: {self.client_ip} (user: {username})')
+        log.info(f'Auth requested: {self.client_ip} (user: {username})')
         return "password"
 
     def check_auth_password(self, username, password):
         """Logs the password attempt and simulates successful authentication."""
-        logging.info(f'Password attempt: {self.client_ip} (user: {username}, password: {password})')
+        log.info(f'Password attempt: {self.client_ip} (user: {username}, password: {password})')
         self.username = username
         return paramiko.AUTH_SUCCESSFUL
 
@@ -108,7 +111,7 @@ def handle_connection(client, addr):
     """Manages incoming connections, handles authentication and commands for the honeypot.
     Logs connection attempts and simulates a shell prompt."""
     client_ip = addr[0]
-    logging.info(f'New connection from: {client_ip}')
+    log.info(f'New connection from: {client_ip}')
 
     transport = paramiko.Transport(client)
     transport.add_server_key(HOST_KEY)
@@ -119,7 +122,7 @@ def handle_connection(client, addr):
         transport.start_server(server=server)
         msg = transport.accept(20)
         if msg is None:
-            logging.warning(f"No message received from {client_ip} within the timeout.")
+            log.warning(f"No message received from {client_ip} within the timeout.")
             return
 
         time.sleep(1)
@@ -143,17 +146,17 @@ def handle_connection(client, addr):
             try:
                 command = msg.recv(1024).decode("utf-8").strip()
                 if command == "exit":
-                    logging.info(f'Command from {client_ip}: {command}')
+                    log.info(f'Command from {client_ip}: {command}')
                     break
                 else:
-                    logging.info(f'Command from {client_ip}: {command}')
+                    log.info(f'Command from {client_ip}: {command}')
                     handle_command(command, msg, user)
             except Exception as e:
-                logging.error(f'Error processing command from {client_ip}: {e}')
+                log.error(f'Error processing command from {client_ip}: {e}')
                 msg.send(f"Error processing command: {e}\r\n".encode("utf-8"))
 
     except Exception as e:
-        logging.error(f'Error handling connection from {client_ip}: {e}')
+        log.error(f'Error handling connection from {client_ip}: {e}')
         try: 
             if msg:
                 msg.send("An error occurred in the connection.\r\n".encode("utf-8"))
@@ -181,7 +184,7 @@ def start_server(port, bind_addr):
     sock.listen(100)
     sock.settimeout(1)  
 
-    logging.info(f'Server listening on {bind_addr}:{port}')
+    log.info(f'Server listening on {bind_addr}:{port}')
     print(f"""
           **SSH HONEYPOT**
 Servidor escuchando en {bind_addr} : {port} \n""")
@@ -193,7 +196,7 @@ Servidor escuchando en {bind_addr} : {port} \n""")
         except socket.timeout:
             continue
         except Exception as e:
-            logging.error(f'Error accepting connection: {e}')
+            log.error(f'Error accepting connection: {e}')
 
     print("Honeypot Detenida.")
 
@@ -208,4 +211,3 @@ def start_honeypot(port):
     start_server(port, honeypot_address)
 
     input_thread.join()
-

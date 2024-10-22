@@ -8,10 +8,17 @@ import logging
 
 
 def suspicious_services(generar_excel):
-    
-    #Configure logging to keep a log of the actions performed
-    logging.basicConfig(filename='suspicious_services.log', level=logging.INFO,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    #Configure log to keep a log of the actions performed
+    log = logging.getLogger('suspicious_services')
+    log.setLevel(logging.INFO)
+
+    # Configurar el formato del logging
+    file_handler = logging.FileHandler('suspicious_services.log')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+
+    # Añadir el manejador al logger
+    log.addHandler(file_handler)
     
     #This is the command that obtain the Services
     powershell_command = 'Get-Service | Select-Object Name, DisplayName, Status, StartType | Export-Csv -Path "services.csv" -NoTypeInformation'
@@ -21,9 +28,9 @@ def suspicious_services(generar_excel):
         if result.returncode != 0:
             raise Exception(f"Error ejecutando el comando: {result.stderr}")
         csv_file = "services.csv"
-        logging.info("El comando de PowerShell se ejecutó correctamente y el archivo CSV fue generado.")
+        log.info("El comando de PowerShell se ejecutó correctamente y el archivo CSV fue generado.")
     except Exception as e:
-        logging.error(f"Ocurrió un error mientras se ejecutaba el comando de PowerShell: {e}")
+        log.error(f"Ocurrió un error mientras se ejecutaba el comando de PowerShell: {e}")
         return
     
     if csv_file:
@@ -44,9 +51,9 @@ def suspicious_services(generar_excel):
             workbook.save(excel_file)
             if generar_excel == 1:
                 print(f"Los servicios han sido guardados en {excel_file}.")
-            logging.info(f"El archivo Excel {excel_file} fue generado correctamente.")
+            log.info(f"El archivo Excel {excel_file} fue generado correctamente.")
         except Exception as e:
-            logging.error(f"Ocurrió un error procesando el archivo CSV o guardando el archivo de Excel: {e}")
+            log.error(f"Ocurrió un error procesando el archivo CSV o guardando el archivo de Excel: {e}")
 
         #Analyze the services and save suspicious ones in a text file named "suspicious_services_report.txt"
         suspicious_services_file = "suspicious_services_report.txt"
@@ -71,15 +78,14 @@ def suspicious_services(generar_excel):
                     f.write("No se encontraron servicios sospechosos.\n")
 
             print(f"El reporte de los servicios sospechosos ha sido generado en {suspicious_services_file}.")
-            logging.info(f"El reporte de los servicios sospechosos ha sido generado en {suspicious_services_file}.")
+            log.info(f"El reporte de los servicios sospechosos ha sido generado en {suspicious_services_file}.")
         except Exception as e:
-            logging.error(f"Ocurrió un error mientras se analizaban los servicios: {e}")
+            log.error(f"Ocurrió un error mientras se analizaban los servicios: {e}")
     
         #Delete the temporary CSV file since the excel it's already saved
         if os.path.exists(csv_file):
             os.remove(csv_file)
-            logging.info(f"El archivo CSV temporal {csv_file} ha sido eliminado.")
+            log.info(f"El archivo CSV temporal {csv_file} ha sido eliminado.")
             if generar_excel == 2:
                 os.remove(excel_file)
-                logging.info(f"El archivo Excel {excel_file} ha sido eliminado.")
-
+                log.info(f"El archivo Excel {excel_file} ha sido eliminado.")

@@ -7,8 +7,14 @@ import logging
 def analyze_connections(output_file="suspicious_connections_report.txt"):
     try:
         #Configuring logging to keep a log of the actions performed
-        logging.basicConfig(filename='connection_analysis.log', level=logging.INFO,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        log = logging.getLogger('analyze_connectionst')
+        log.setLevel(logging.INFO)
+
+        file_handler = logging.FileHandler('connection_analysis.log')
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+
+        log.addHandler(file_handler)
 
         #Standard ports that we are going to check
         standard_ports = {22, 25, 80, 465, 587, 8080}
@@ -17,7 +23,7 @@ def analyze_connections(output_file="suspicious_connections_report.txt"):
         result = subprocess.run(["powershell.exe", "-ExecutionPolicy", "Bypass", "-Command", "Get-NetTCPConnection | Where-Object { $_.State -eq 'Established' }"], capture_output=True, text=True)
         result.check_returncode() #Ensure the command was executed successfully
         connections_output = result.stdout
-        logging.info("Conexiones TCP obtenidas exitosamente.")
+        log.info("Conexiones TCP obtenidas exitosamente.")
 
         suspicious_connections=[]
         #This regular expression is in charge of extracting the port from the netstat output
@@ -32,7 +38,7 @@ def analyze_connections(output_file="suspicious_connections_report.txt"):
                     if int(port) not in standard_ports:
                         suspicious_connections.append(line) #Save the suspicious connection
                         break #If the line is suspicious, stop analyzing the other ports in the line
-        logging.info(f"Total de conexiones sospechosas encontradas: {len(suspicious_connections)}")
+        log.info(f"Total de conexiones sospechosas encontradas: {len(suspicious_connections)}")
 
         #Save the report to the file
         with open(output_file, "w") as f: #Open the file to write the results
@@ -42,12 +48,12 @@ def analyze_connections(output_file="suspicious_connections_report.txt"):
                     f.write(connection + "\n")
             else:
                 f.write("No se han encontrado conexiones sospechosas.\n") #In case there are no suspicious connections
-        logging.info(f"Reporte generado en {output_file}")
+        log.info(f"Reporte generado en {output_file}")
         print(f"Reporte generado en {output_file}")
 
     except subprocess.CalledProcessError as e:
-        logging.error(f"Ha ocurrido un error mientras se ejecutaba el comando de PowerShell: {e}")
+        log.error(f"Ha ocurrido un error mientras se ejecutaba el comando de PowerShell: {e}")
         print(f"Ha ocurrido un error mientras se ejecutaba el comando de PowerShell: {e}")
     except Exception as e:
-        logging.error(f"Ha ocurrido un error mientras se analizaban las conexiones: {e}")
+        log.error(f"Ha ocurrido un error mientras se analizaban las conexiones: {e}")
         print(f"Ha ocurrido un error mientras se analizaban las conexiones: {e}")
