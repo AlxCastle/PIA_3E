@@ -25,6 +25,12 @@ Este proyecto consiste en la creación de cuatro scripts en Python que realizan 
 - Paquetes de Python: `paramiko`, `Requests`, `termcolor`, `shodan`, `openpyxl`
 - Tener acceso a PowerShell en Windows para ejecutar ciertos comandos.
 
+Instala los paquetes necesarios utilizando:
+
+```bash
+pip install -r requirements.txt
+```  
+
 ## Instrucciones de Uso
 Clona el repositorio en tu máquina local:
 
