@@ -5,7 +5,7 @@ import json
 
 #Function to search for vulnerabilities in different ports for different IPS
 
-def Search_Vulnerabilities(APIKEY,Port_shodan):
+def search_vulnerabilities(APIKEY,Port_shodan):
     logging.basicConfig(filename='module_shodan.log', level=logging.INFO)
     try:
         logging.info("Se intenta entrar en la api con la apikey: %s" % APIKEY)
@@ -110,7 +110,7 @@ def Search_Vulnerabilities(APIKEY,Port_shodan):
 
 #Function to search suspicious IPs and show the reports that are made
 
-def Suspicious_IP(APIKEY):
+def suspicious_ip(APIKEY):
     logging.basicConfig(filename='module_IPAbuseDB.log', level=logging.INFO)
 
     logging.info("Primero se obtiene en variables la url y todo lo que se ocupa para conectarse a la API")
