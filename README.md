@@ -29,7 +29,7 @@ Este proyecto consiste en la creación de cuatro scripts en Python que realizan 
 Clona el repositorio en tu máquina local:
 
 ```bash
-git clone https://github.com/tu_usuario/tu_repositorio.git
+git clone [https://github.com/tu_usuario/tu_repositorio.git](https://github.com/AlxCastle/PIA_3E.git)
 ```
 
 Ahora cuentas con la carpeta y los scripts.
