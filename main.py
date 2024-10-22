@@ -1,6 +1,6 @@
 from termcolor import colored
 from Modules.honeypot_ssh import start_honeypot
-from Modules.Modules_API import Search_Vulnerabilities, Suspicious_IP 
+from Modules.modules_api import search_vulnerabilities, suspicious_ip
 from Modules.analyze_connections import analyze_connections
 from Modules.suspicious_services import suspicious_services
 
